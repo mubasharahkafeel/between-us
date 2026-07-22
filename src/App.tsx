@@ -502,7 +502,16 @@ const ProfileTab = () => {
   const toggleTheme = () => {
     dispatch({ type: 'TOGGLE_THEME' });
   };
-
+const handlePartnerImageUpload = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      dispatch({ type: 'UPDATE_PARTNER_AVATAR', payload: { avatar: reader.result } });
+    };
+    reader.readAsDataURL(file);
+  }
+};
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -529,6 +538,34 @@ const ProfileTab = () => {
         <h2 className="text-xl font-bold dark:text-white">{state.me.name}</h2>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Paired with {state.partner.name} ❤️</p>
       </div>
+      <div className="flex flex-col items-center relative">
+  <div className="relative">
+    <img
+      src={state.partner.avatar}
+      className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-800 shadow-md mb-4 object-cover"
+      alt="Partner"
+    />
+
+    <label
+      htmlFor="partner-avatar-upload"
+      className="absolute bottom-4 right-0 bg-rose-500 text-white p-2 rounded-full cursor-pointer shadow-lg hover:bg-rose-600 transition-colors"
+    >
+      <Camera size={14} />
+    </label>
+
+    <input
+      type="file"
+      id="partner-avatar-upload"
+      className="hidden"
+      accept="image/*"
+      onChange={handlePartnerImageUpload}
+    />
+  </div>
+
+  <h2 className="text-xl font-bold dark:text-white">
+    {state.partner.name}
+  </h2>
+</div>
 
       <div className="space-y-2">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 ml-2 mb-2">App Settings</h3>
@@ -617,6 +654,15 @@ export default function App() {
           me: { ...prev.me, avatar: action.payload.avatar }
         }));
         break;
+      case 'UPDATE_PARTNER_AVATAR':
+  setState(prev => ({
+    ...prev,
+    partner: {
+      ...prev.partner,
+      avatar: action.payload.avatar
+    }
+  }));
+  break;
       default:
         break;
     }
