@@ -13,13 +13,13 @@ const INITIAL_STATE = {
   me: {
     name: "Mubasharah",
     avatar: "https://api.dicebear.com/9.x/micah/svg?seed=Mubasharah&backgroundColor=ffdfbf,ffd5dc",
-    mood: "ðŸ¥º Missing you",
+    mood: "🥺 Missing you",
     hasSharedToday: false
   },
   partner: {
     name: "Usman",
     avatar: "https://api.dicebear.com/9.x/micah/svg?seed=Usman&backgroundColor=b6e3f4,c0aede",
-    mood: "ðŸ¥° Happy",
+    mood: "🥰 Happy",
     hasSharedToday: true
   },
   relationship: {
@@ -35,14 +35,14 @@ const INITIAL_STATE = {
       date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
       author: 'Usman',
       text: "Today was exhausting, but your call made everything better.",
-      reactions: ['â¤ï¸', 'ðŸ¥¹']
+      reactions: ['❤️', '🥺']
     },
     {
       id: 2,
       date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
       author: 'Mubasharah',
-      text: "I wanted to call you all day. Miss you â¤ï¸ Had a pretty good day at work though.",
-      reactions: ['ðŸ«‚']
+      text: "I wanted to call you all day. Missed you a little extra today 🥺 My day was good, but it would've been better with you.",
+      reactions: ['🥰']
     }
   ],
   memories: [
@@ -203,7 +203,7 @@ const HomeTab = () => {
             <span className="text-4xl font-black text-rose-500 dark:text-rose-400">{daysUntilMeet}</span>
             <span className="text-lg font-bold text-rose-400/80 dark:text-rose-300/80">days</span>
           </div>
-          <p className="text-xs text-rose-500/60 dark:text-slate-400 mt-2 font-medium">Date isn't fixed, but my heart is ready ðŸ¥¹â¤ï¸</p>
+           <p className="text-xs text-rose-500/60 dark:text-slate-400 mt-2 font-medium">Date isn't fixed, but my heart is ready ❤️</p>
         </div>
       </Card>
 
@@ -226,12 +226,12 @@ const HomeTab = () => {
           <div className="flex items-center gap-2">
              <img src={state.me.avatar} className="w-6 h-6 rounded-full" alt="Me" />
              <span className={state.me.hasSharedToday ? "text-green-500 font-medium" : "text-slate-400"}>
-               {state.me.hasSharedToday ? "âœ“ Shared" : "Waiting..."}
+               {state.me.hasSharedToday ? "✓ Shared" : "Waiting..."}
              </span>
           </div>
           <div className="flex items-center gap-2">
              <span className={state.partner.hasSharedToday ? "text-green-500 font-medium" : "text-slate-400"}>
-               {state.partner.hasSharedToday ? "âœ“ Shared" : "Waiting..."}
+               {state.partner.hasSharedToday ? "✓ Shared" : "Waiting..."}
              </span>
              <img src={state.partner.avatar} className="w-6 h-6 rounded-full" alt="Partner" />
           </div>
@@ -401,7 +401,7 @@ const UsTab = () => {
         </h3>
         <div className="grid grid-cols-2 gap-3 mb-3">
            <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 text-center">
-             <div className="text-3xl mb-2">ðŸ’¬</div>
+             <div className="text-3xl mb-2">💬</div>
              <p className="text-sm font-bold text-slate-700 dark:text-slate-200">First Chat</p>
              <p className="text-xs text-slate-400 mt-1">July 9, 2024</p>
            </div>
