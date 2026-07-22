@@ -522,7 +522,17 @@ const handlePartnerImageUpload = (e) => {
       reader.readAsDataURL(file);
     }
   };
+ const handleNameChange = (person) => {
+    const currentName = person === 'me' ? state.me.name : state.partner.name;
+    const newName = window.prompt('Enter name or nickname:', currentName);
 
+    if (newName && newName.trim()) {
+      dispatch({
+        type: person === 'me' ? 'UPDATE_NAME' : 'UPDATE_PARTNER_NAME',
+        payload: { name: newName.trim() }
+      });
+    }
+  };
   return (
     <div className="space-y-8 pb-24 animate-in fade-in duration-300">
       <h1 className="text-2xl font-bold text-slate-800 dark:text-white pt-2">Settings</h1>
@@ -535,8 +545,17 @@ const handlePartnerImageUpload = (e) => {
           </label>
           <input type="file" id="avatar-upload" className="hidden" accept="image/*" onChange={handleImageUpload} />
         </div>
-        <h2 className="text-xl font-bold dark:text-white">{state.me.name}</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Paired with {state.partner.name} ❤️</p>
+        <div className="flex items-center gap-2">
+  <h2 className="text-xl font-bold dark:text-white">{state.me.name}</h2>
+  <button
+    onClick={() => handleNameChange('me')}
+    className="text-slate-400 hover:text-rose-500"
+    aria-label="Edit my name"
+  >
+    ✏️
+  </button>
+</div>
+      
       </div>
       <div className="flex flex-col items-center relative">
   <div className="relative">
@@ -562,9 +581,16 @@ const handlePartnerImageUpload = (e) => {
     />
   </div>
 
-  <h2 className="text-xl font-bold dark:text-white">
-    {state.partner.name}
-  </h2>
+  <div className="flex items-center gap-2">
+  <h2 className="text-xl font-bold dark:text-white">{state.partner.name}</h2>
+  <button
+    onClick={() => handleNameChange('partner')}
+    className="text-slate-400 hover:text-rose-500"
+    aria-label="Edit partner name"
+  >
+    ✏️
+  </button>
+</div>
 </div>
 
       <div className="space-y-2">
@@ -615,7 +641,19 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   
   // Custom Reducer-like state management for simplicity in single file
-  const [state, setState] = useState(INITIAL_STATE);
+  const [state, setState] = useState(() => {
+  const savedData = localStorage.getItem('betweenUsData');
+
+  if (savedData) {
+    try {
+      return JSON.parse(savedData);
+    } catch (error) {
+      return INITIAL_STATE;
+    }
+  }
+
+  return INITIAL_STATE;
+});
 
   const dispatch = (action) => {
     switch (action.type) {
@@ -655,19 +693,43 @@ export default function App() {
         }));
         break;
       case 'UPDATE_PARTNER_AVATAR':
-  setState(prev => ({
-    ...prev,
-    partner: {
-      ...prev.partner,
-      avatar: action.payload.avatar
-    }
-  }));
-  break;
+        setState(prev => ({
+          ...prev,
+          partner: {
+            ...prev.partner,
+            avatar: action.payload.avatar
+          }
+        }));
+        break;
+
+      case 'UPDATE_NAME':
+        setState(prev => ({
+          ...prev,
+          me: {
+            ...prev.me,
+            name: action.payload.name
+          }
+        }));
+        break;
+
+      case 'UPDATE_PARTNER_NAME':
+        setState(prev => ({
+          ...prev,
+          partner: {
+            ...prev.partner,
+            name: action.payload.name
+          }
+        }));
+        break;
+
       default:
         break;
     }
   };
-
+// Save app data in browser
+useEffect(() => {
+  localStorage.setItem('betweenUsData', JSON.stringify(state));
+}, [state]);
   // Apply theme class to body
   useEffect(() => {
     if (state.theme === 'dark') {
