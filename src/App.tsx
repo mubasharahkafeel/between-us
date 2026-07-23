@@ -903,7 +903,59 @@ const DiaryTab = () => {
   useEffect(() => {
     setEntries(state.diaryEntries);
   }, [state.diaryEntries]);
+useEffect(() => {
+  const loadDiaryEntries = async () => {
+    if (!state.me?.name) return;
 
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData.session?.user?.id;
+
+    if (!userId) return;
+
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("couple_id")
+      .eq("id", userId)
+      .single();
+
+    if (profileError || !profile?.couple_id) {
+      console.error("Could not load couple:", profileError);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("diary_entries")
+      .select(`
+        id,
+        content,
+        entry_date,
+        created_at,
+        author_id,
+        profiles!diary_entries_author_id_fkey (
+          display_name
+        )
+      `)
+      .eq("couple_id", profile.couple_id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error loading diary entries:", error);
+      return;
+    }
+
+    const loadedEntries: DiaryEntry[] = (data || []).map((entry: any) => ({
+      id: entry.id,
+      date: entry.created_at || entry.entry_date,
+      author: entry.profiles?.display_name || "Unknown",
+      text: entry.content,
+      reactions: [],
+    }));
+
+    setEntries(loadedEntries);
+  };
+
+  loadDiaryEntries();
+}, []);
   const sortedEntries = useMemo(
     () =>
       [...entries].sort(
