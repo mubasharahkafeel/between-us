@@ -1,24 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./index.css";
 
-const rootElement = document.getElementById("root");
+document.body.style.margin = "0";
 
-if (!rootElement) {
-  document.body.innerHTML =
-    '<h1 style="color:red">ERROR: root element not found</h1>';
+const root = document.getElementById("root");
+
+if (root) {
+  root.innerHTML = `
+    <div style="
+      min-height:100vh;
+      background:#ff1744;
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:40px;
+      font-family:sans-serif;
+      text-align:center;
+    ">
+      TEST SUCCESS ❤️
+    </div>
+  `;
 } else {
-  try {
-    ReactDOM.createRoot(rootElement).render(
-      <App />
-    );
-  } catch (error) {
-    document.body.innerHTML = `
-      <div style="padding:20px;color:red;background:white;font-family:monospace">
-        <h2>STARTUP ERROR</h2>
-        <pre>${String(error)}</pre>
-      </div>
-    `;
-  }
+  document.body.innerHTML = `
+    <h1 style="color:red">
+      ROOT NOT FOUND
+    </h1>
+  `;
 }
