@@ -37,8 +37,6 @@ import { supabase } from "./supabase";
 
 type Theme = "light" | "dark";
 
-// 👇 YAHAN MERA DIYA HUA CODE PASTE KARO
-
 type TabName = "home" | "diary" | "us" | "letters" | "profile";
 
 const validTabs: TabName[] = [
@@ -66,8 +64,6 @@ const getInitialTab = (): TabName => {
 
   return "home";
 };
-
-// 👆 CODE KHATAM
 
 type Person = {
   name: string;
