@@ -2162,7 +2162,36 @@ export default function App() {
       subscription.unsubscribe();
     };
   }, []);
+useEffect(() => {
+  if (!session?.user?.id) return;
 
+  const loadProfile = async () => {
+    const { data: profile, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", session.user.id)
+      .single();
+
+    if (error) {
+      console.error("Error loading profile:", error);
+      return;
+    }
+
+    if (profile) {
+      setState((previous) => ({
+        ...previous,
+        me: {
+          ...previous.me,
+          name: profile.display_name || previous.me.name,
+          avatar: profile.avatar_url || previous.me.avatar,
+          mood: profile.mood || previous.me.mood,
+        },
+      }));
+    }
+  };
+
+  loadProfile();
+}, [session]);
   /* -------------------------
      DISPATCH
   ------------------------- */
