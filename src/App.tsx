@@ -37,6 +37,38 @@ import { supabase } from "./supabase";
 
 type Theme = "light" | "dark";
 
+// 👇 YAHAN MERA DIYA HUA CODE PASTE KARO
+
+type TabName = "home" | "diary" | "us" | "letters" | "profile";
+
+const validTabs: TabName[] = [
+  "home",
+  "diary",
+  "us",
+  "letters",
+  "profile",
+];
+
+const getInitialTab = (): TabName => {
+  const hash = window.location.hash
+    .replace("#/", "")
+    .replace("#", "") as TabName;
+
+  if (validTabs.includes(hash)) {
+    return hash;
+  }
+
+  const savedTab = localStorage.getItem("betweenUsActiveTab") as TabName;
+
+  if (validTabs.includes(savedTab)) {
+    return savedTab;
+  }
+
+  return "home";
+};
+
+// 👆 CODE KHATAM
+
 type Person = {
   name: string;
   avatar: string;
