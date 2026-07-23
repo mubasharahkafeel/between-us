@@ -1,9 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
+import { createClient } from "@supabase/supabase-js";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <div style={{ padding: "40px", fontSize: "30px", color: "black" }}>
-    TEST WORKING
-  </div>
-);
+const supabaseUrl = "https://cyhqpebyneqyejenydfu.supabase.co";
+const supabaseKey = "sb_publishable_rIVNNigOFeACu_FiZd03yg_-48gdzCg";
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
