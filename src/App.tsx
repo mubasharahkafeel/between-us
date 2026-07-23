@@ -2040,7 +2040,37 @@ const ProfileTab = () => {
     </div>
   );
 };
+function NavButton({
+  icon,
+  label,
+  isActive,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex flex-col items-center justify-center gap-1 flex-1 py-2 transition-all ${
+        isActive
+          ? "text-rose-500"
+          : "text-slate-400 hover:text-rose-400"
+      }`}
+    >
+      <div className={isActive ? "scale-110" : ""}>
+        {icon}
+      </div>
 
+      <span className="text-[10px] font-medium">
+        {label}
+      </span>
+    </button>
+  );
+}
 /* =========================================================
    MAIN APP
 ========================================================= */
