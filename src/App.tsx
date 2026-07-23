@@ -2221,6 +2221,33 @@ useEffect(() => {
   const dispatch = (action: Action) => {
     switch (action.type) {
       case "ADD_DIARY_ENTRY":
+        if (session?.user?.id) {
+  supabase
+    .from("profiles")
+    .select("couple_id")
+    .eq("id", session.user.id)
+    .single()
+    .then(({ data: profile, error: profileError }) => {
+      if (profileError || !profile?.couple_id) {
+        console.error("Could not find couple:", profileError);
+        return;
+      }
+
+      supabase
+        .from("diary_entries")
+        .insert({
+          couple_id: profile.couple_id,
+          author_id: session.user.id,
+          content: action.payload.text,
+          entry_date: new Date().toISOString().split("T")[0],
+        })
+        .then(({ error }) => {
+          if (error) {
+            console.error("Error saving diary entry:", error);
+          }
+        });
+    });
+        }
         setState((previous) => {
           const newEntry: DiaryEntry = {
             id: Date.now(),
