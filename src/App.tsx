@@ -2165,32 +2165,54 @@ export default function App() {
 useEffect(() => {
   if (!session?.user?.id) return;
 
-  const loadProfile = async () => {
-    const { data: profile, error } = await supabase
+  const loadProfiles = async () => {
+    // 1. Get logged-in user's profile
+    const { data: myProfile, error: myError } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", session.user.id)
       .single();
 
-    if (error) {
-      console.error("Error loading profile:", error);
+    if (myError || !myProfile) {
+      console.error("Error loading my profile:", myError);
       return;
     }
 
-    if (profile) {
-      setState((previous) => ({
-        ...previous,
-        me: {
-          ...previous.me,
-          name: profile.display_name || previous.me.name,
-          avatar: profile.avatar_url || previous.me.avatar,
-          mood: profile.mood || previous.me.mood,
-        },
-      }));
+    // 2. Get partner from the same couple
+    const { data: partnerProfile, error: partnerError } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("couple_id", myProfile.couple_id)
+      .neq("id", session.user.id)
+      .maybeSingle();
+
+    if (partnerError) {
+      console.error("Error loading partner profile:", partnerError);
     }
+
+    // 3. Put Supabase data into the app
+    setState((previous) => ({
+      ...previous,
+
+      me: {
+        ...previous.me,
+        name: myProfile.display_name || previous.me.name,
+        avatar: myProfile.avatar_url || previous.me.avatar,
+        mood: myProfile.mood || previous.me.mood,
+      },
+
+      partner: partnerProfile
+        ? {
+            ...previous.partner,
+            name: partnerProfile.display_name || previous.partner.name,
+            avatar: partnerProfile.avatar_url || previous.partner.avatar,
+            mood: partnerProfile.mood || previous.partner.mood,
+          }
+        : previous.partner,
+    }));
   };
 
-  loadProfile();
+  loadProfiles();
 }, [session]);
   /* -------------------------
      DISPATCH
