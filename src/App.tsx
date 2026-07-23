@@ -896,7 +896,7 @@ const DiaryTab = () => {
     useState<DiaryEntry | null>(null);
 
   const [entries, setEntries] =
-    useState<DiaryEntry[]>(state.diaryEntries);
+    useState<DiaryEntry[]>([]);
 
   const [calendarOpen, setCalendarOpen] = useState(false);
   
