@@ -208,23 +208,7 @@ const INITIAL_STATE: AppState = {
     longestStreak: 0,
   },
 
-  diaryEntries: [
-    {
-      id: 1,
-      date: new Date(Date.now() - 86400000).toISOString(),
-      author: "Usman",
-      text: "Today was exhausting, but your call made everything better.",
-      reactions: ["❤️", "🥺"],
-    },
-    {
-      id: 2,
-      date: new Date(Date.now() - 86400000).toISOString(),
-      author: "Mubasharah",
-      text:
-        "I wanted to call you all day. Missed you a little extra today 🥺 My day was good, but it would've been better with you.",
-      reactions: ["🥰"],
-    },
-  ],
+diaryEntries: [],
 
   memories: [
     "July 9, 2024 - The day our very first conversation began.",
