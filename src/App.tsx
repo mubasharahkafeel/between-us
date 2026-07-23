@@ -6,6 +6,7 @@ import {
   Plus, X, Check, ArrowRight
 } from 'lucide-react';
 
+import { supabase } from './supabase';
 
 // --- Mock Initial State ---
 const INITIAL_STATE = {
