@@ -4,6 +4,7 @@ import React, {
   useState,
   createContext,
   useContext,
+  Component,
 } from "react";
 
 import {
@@ -30,11 +31,69 @@ import {
 } from "lucide-react";
 
 import { supabase } from "./supabase";
+window.addEventListener("error", (event) => {
+  document.body.innerHTML = `
+    <div style="padding:20px;color:red;background:white;font-family:monospace;white-space:pre-wrap;">
+      <h2>APP ERROR</h2>
+      <p>${event.message}</p>
+      <p>${event.filename}:${event.lineno}:${event.colno}</p>
+    </div>
+  `;
+});
 
+window.addEventListener("unhandledrejection", (event) => {
+  document.body.innerHTML = `
+    <div style="padding:20px;color:red;background:white;font-family:monospace;white-space:pre-wrap;">
+      <h2>PROMISE ERROR</h2>
+      <p>${String(event.reason)}</p>
+    </div>
+  `;
+});
 /* =========================================================
    TYPES
 ========================================================= */
+class ErrorBoundary extends Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
 
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error("APP CRASH:", error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div
+          style={{
+            padding: "30px",
+            background: "#111",
+            color: "#ff6b6b",
+            minHeight: "100vh",
+            fontFamily: "monospace",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          <h1>Between Us crashed</h1>
+
+          <p>{this.state.error?.message}</p>
+
+          <pre>{this.state.error?.stack}</pre>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 type Theme = "light" | "dark";
 
 type TabName = "home" | "diary" | "us" | "letters" | "profile";
