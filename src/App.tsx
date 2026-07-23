@@ -899,10 +899,7 @@ const DiaryTab = () => {
     useState<DiaryEntry[]>(state.diaryEntries);
 
   const [calendarOpen, setCalendarOpen] = useState(false);
-
-  useEffect(() => {
-    setEntries(state.diaryEntries);
-  }, [state.diaryEntries]);
+  
 useEffect(() => {
   const loadDiaryEntries = async () => {
     if (!state.me?.name) return;
