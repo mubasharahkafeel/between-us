@@ -1,20 +1,10 @@
-const root = document.getElementById("root");
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
 
-if (root) {
-  root.innerHTML = `
-    <div style="
-      position:fixed;
-      inset:0;
-      background:#7c3aed;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:Arial,sans-serif;
-      font-size:36px;
-      text-align:center;
-    ">
-      JAVASCRIPT WORKING ❤️
-    </div>
-  `;
-}
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
